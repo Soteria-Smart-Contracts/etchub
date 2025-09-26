@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Title - ETC Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #0D4F4C;
+            --secondary-copper: #B87333;
+            --accent-gold: #D4AF37;
+            --bg-navy: #0A0E1A;
+            --text-light: #E8E8E8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-navy) 0%, var(--primary-teal) 100%);
+            min-height: 100vh;
+            color: var(--text-light);
+        }
+
+        .orbitron {
+            font-family: 'Orbitron', monospace;
+        }
+
+        .copper-gradient {
+            background: linear-gradient(45deg, var(--secondary-copper), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .article-content a {
+            color: var(--accent-gold);
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-black bg-opacity-20 backdrop-blur-md border-b border-opacity-20 border-gray-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold orbitron copper-gradient">ETC Hub</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="nav-link text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Home</a>
+                        <a href="news.html" class="nav-link text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">News</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article Section -->
+    <section class="pt-24 pb-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <article>
+                <header class="mb-8">
+                    <h1 class="text-4xl lg:text-5xl font-bold orbitron mb-4 copper-gradient">The Future of Ethereum Classic: A Deep Dive</h1>
+                    <div class="text-gray-400 text-sm">
+                        <span>Posted on <time datetime="2024-09-26">September 26, 2024</time></span>
+                        <span class="mx-2">&bull;</span>
+                        <span>By Jane Doe</span>
+                    </div>
+                </header>
+
+                <div class="prose prose-invert lg:prose-xl max-w-none article-content">
+                    <p class="lead">Ethereum Classic (ETC) continues to be a significant player in the blockchain space, upholding the principles of "Code is Law." This article explores the recent developments and future potential of the original Ethereum chain.</p>
+
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+
+                    <figure>
+                        <img src="resources/etc-coins.png" alt="ETC Coins" class="rounded-lg shadow-lg">
+                        <figcaption class="text-center text-gray-400 text-sm mt-2">The enduring symbol of Ethereum Classic.</figcaption>
+                    </figure>
+
+                    <h2>Recent Network Upgrades</h2>
+                    <p>The latest network upgrade, codenamed "Mystique," has introduced several key improvements to the Ethereum Classic network. These enhancements focus on improving security, scalability, and interoperability with other blockchains. One of the most notable changes is the adoption of a new mining algorithm, which aims to further decentralize the network and increase hashrate security.</p>
+
+                    <h2>Community and Ecosystem Growth</h2>
+                    <p>The ETC community has seen a resurgence in activity, with new dApps and projects being built on the platform. The ETC Cooperative and other community-led initiatives are actively fostering development and adoption. This growing ecosystem is a testament to the long-term viability and appeal of Ethereum Classic's immutable and decentralized philosophy.</p>
+
+                    <blockquote>
+                        <p>"The immutability of the chain is its greatest strength. In a world of constant change, Ethereum Classic provides a stable and predictable platform for decentralized applications."</p>
+                    </blockquote>
+
+                    <h2>Conclusion</h2>
+                    <p>With a strong commitment to its core principles, a growing ecosystem, and significant network upgrades, the future of Ethereum Classic looks bright. As the blockchain landscape evolves, ETC remains a steadfast and reliable choice for developers and users who value decentralization and immutability above all else.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black bg-opacity-50 py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold orbitron copper-gradient mb-4">ETC Hub</h3>
+                <p class="text-gray-400 mb-6">Building the future of Ethereum Classic together</p>
+                <div class="border-t border-gray-700 pt-8">
+                    <p class="text-gray-400 text-sm">
+                        © 2024 ETC Hub. All rights reserved. Built for the Ethereum Classic community.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
