@@ -7,8 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -162,10 +160,8 @@
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8">
                         <a href="#home" class="nav-link text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Home</a>
-                        <a href="news.html" class="nav-link text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">News</a>
                         <a href="#features" class="nav-link text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Features</a>
                         <a href="#about" class="nav-link text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">About</a>
-                        <button id="authBtn" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">Get Started</button>
                     </div>
                 </div>
                 <div class="md:hidden">
@@ -196,14 +192,6 @@
                         Join the premier community platform for Ethereum Classic enthusiasts. Connect, share insights, 
                         and shape the future of decentralized blockchain technology through networking and communications.
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start reveal-text">
-                        <button id="joinBtn" class="btn-primary px-8 py-4 rounded-lg text-lg font-semibold">
-                            Join ETC Hub
-                        </button>
-                        <a href="news.html" class="border border-gray-500 px-8 py-4 rounded-lg text-lg font-semibold hover:border-gray-300 transition-colors">
-                            Explore News
-                        </a>
-                    </div>
                 </div>
                 <div class="relative">
                     <div class="floating-animation">
@@ -221,14 +209,6 @@
                 <div class="stat-item reveal-text">
                     <div class="text-4xl font-bold orbitron copper-gradient mb-2" data-count="210700000">0</div>
                     <div class="text-gray-300">Max ETC Supply</div>
-                </div>
-                <div class="stat-item reveal-text">
-                    <div class="text-4xl font-bold orbitron copper-gradient mb-2" data-count="100">0</div>
-                    <div class="text-gray-300">Community Members</div>
-                </div>
-                <div class="stat-item reveal-text">
-                    <div class="text-4xl font-bold orbitron copper-gradient mb-2" data-count="24">0</div>
-                    <div class="text-gray-300">Active Posts</div>
                 </div>
                 <div class="stat-item reveal-text">
                     <div class="text-4xl font-bold orbitron copper-gradient mb-2" data-count="99">0</div>
@@ -254,51 +234,11 @@
                 <div class="card-hover p-8 rounded-2xl reveal-text">
                     <div class="feature-icon">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-4 text-center">Community Blog</h3>
-                    <p class="text-gray-400 text-center">Share insights, news, and analysis about Ethereum Classic with the community through our moderated blog platform.</p>
-                </div>
-                
-                <div class="card-hover p-8 rounded-2xl reveal-text">
-                    <div class="feature-icon">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-4 text-center">User Profiles</h3>
-                    <p class="text-gray-400 text-center">Create your professional profile, showcase your expertise, and connect with other ETC enthusiasts.</p>
-                </div>
-                
-                <div class="card-hover p-8 rounded-2xl reveal-text">
-                    <div class="feature-icon">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-4 text-center">Secure Platform</h3>
-                    <p class="text-gray-400 text-center">Built with security-first principles featuring JWT authentication and secure API endpoints.</p>
-                </div>
-                
-                <div class="card-hover p-8 rounded-2xl reveal-text">
-                    <div class="feature-icon">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
                     </div>
                     <h3 class="text-xl font-semibold mb-4 text-center">Real-time Updates</h3>
                     <p class="text-gray-400 text-center">Stay informed with the latest ETC network updates, price movements, and community discussions.</p>
-                </div>
-                
-                <div class="card-hover p-8 rounded-2xl reveal-text">
-                    <div class="feature-icon">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-4 text-center">Discussion Forums</h3>
-                    <p class="text-gray-400 text-center">Engage in meaningful discussions about ETC development, mining, staking, and future prospects.</p>
                 </div>
                 
                 <div class="card-hover p-8 rounded-2xl reveal-text">
@@ -330,20 +270,6 @@
                         Our mission is to foster collaboration, share knowledge, and drive the adoption of Ethereum Classic 
                         through powerful networking tools, insightful content, and community-driven initiatives.
                     </p>
-                    <div class="space-y-4 reveal-text">
-                        <div class="flex items-center">
-                            <div class="w-2 h-2 bg-gradient-to-r from-copper to-gold rounded-full mr-4"></div>
-                            <span class="text-gray-300">Community-driven content and discussions</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-2 h-2 bg-gradient-to-r from-copper to-gold rounded-full mr-4"></div>
-                            <span class="text-gray-300">Secure and scalable platform architecture</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-2 h-2 bg-gradient-to-r from-copper to-gold rounded-full mr-4"></div>
-                            <span class="text-gray-300">Professional networking and collaboration tools</span>
-                        </div>
-                    </div>
                 </div>
                 <div class="relative reveal-text">
                     <img src="resources/etc-coins.png" alt="ETC Ecosystem" class="w-full h-auto rounded-2xl shadow-2xl">
@@ -384,37 +310,162 @@
         </div>
     </footer>
 
-    <!-- Auth Modal -->
-    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-gray-900 rounded-2xl p-8 w-full max-w-md border border-gray-700">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold orbitron copper-gradient">Join ETC Hub</h3>
-                    <button id="closeModal" class="text-gray-400 hover:text-white">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                
-                <div class="space-y-4">
-                    <button id="loginBtn" class="w-full bg-gradient-to-r from-copper to-gold text-white py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity">
-                        Sign In
-                    </button>
-                    <button id="signupBtn" class="w-full border border-gray-600 text-gray-300 py-3 rounded-lg font-semibold hover:border-gray-400 transition-colors">
-                        Create Account
-                    </button>
-                </div>
-                
-                <div class="mt-6 text-center">
-                    <p class="text-gray-400 text-sm">
-                        By joining, you agree to our Terms of Service and Privacy Policy
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = document.querySelector(anchor.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
 
-    <script src="main.js"></script>
+            // Animate hero text
+            anime.timeline({
+                easing: 'easeOutExpo',
+                duration: 1000
+            })
+            .add({
+                targets: '.reveal-text',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                delay: anime.stagger(200)
+            });
+
+            // Floating animation for hero image
+            anime({
+                targets: '.floating-animation',
+                translateY: [-10, 10],
+                duration: 3000,
+                direction: 'alternate',
+                loop: true,
+                easing: 'easeInOutSine'
+            });
+
+            // Particle System
+            const canvas = document.getElementById('particleCanvas');
+            if (canvas) {
+                let particles = [];
+                const ctx = canvas.getContext('2d');
+
+                const resizeCanvas = () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = document.querySelector('.hero-bg').offsetHeight;
+                };
+
+                const createParticles = () => {
+                    particles = [];
+                    const particleCount = Math.min(50, Math.floor(window.innerWidth / 20));
+
+                    for (let i = 0; i < particleCount; i++) {
+                        particles.push({
+                            x: Math.random() * canvas.width,
+                            y: Math.random() * canvas.height,
+                            vx: (Math.random() - 0.5) * 0.5,
+                            vy: (Math.random() - 0.5) * 0.5,
+                            radius: Math.random() * 2 + 1,
+                            opacity: Math.random() * 0.5 + 0.2
+                        });
+                    }
+                };
+
+                const updateParticles = () => {
+                    particles.forEach(particle => {
+                        particle.x += particle.vx;
+                        particle.y += particle.vy;
+
+                        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                    });
+                };
+
+                const drawParticles = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    particles.forEach((particle, i) => {
+                        particles.slice(i + 1).forEach(otherParticle => {
+                            const dx = particle.x - otherParticle.x;
+                            const dy = particle.y - otherParticle.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+
+                            if (distance < 100) {
+                                ctx.beginPath();
+                                ctx.strokeStyle = `rgba(212, 175, 55, ${0.1 * (1 - distance / 100)})`;
+                                ctx.lineWidth = 1;
+                                ctx.moveTo(particle.x, particle.y);
+                                ctx.lineTo(otherParticle.x, otherParticle.y);
+                                ctx.stroke();
+                            }
+                        });
+                    });
+
+                    particles.forEach(particle => {
+                        ctx.beginPath();
+                        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(184, 115, 51, ${particle.opacity})`;
+                        ctx.fill();
+                    });
+                };
+
+                const animate = () => {
+                    updateParticles();
+                    drawParticles();
+                    requestAnimationFrame(animate);
+                };
+
+                resizeCanvas();
+                createParticles();
+                animate();
+
+                window.addEventListener('resize', () => {
+                    resizeCanvas();
+                    createParticles();
+                });
+            }
+
+            // Animate Stats on Scroll
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        const finalValue = parseInt(target.dataset.count);
+
+                        anime({
+                            targets: target,
+                            innerHTML: [0, finalValue],
+                            duration: 2000,
+                            easing: 'easeOutExpo',
+                            round: 1
+                        });
+
+                        statsObserver.unobserve(target);
+                    }
+                });
+            });
+
+            document.querySelectorAll('[data-count]').forEach(el => {
+                statsObserver.observe(el);
+            });
+
+            // Reveal elements on scroll
+            const scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            document.querySelectorAll('.reveal-text').forEach(el => {
+                scrollObserver.observe(el);
+            });
+        });
+    </script>
 </body>
 </html>
