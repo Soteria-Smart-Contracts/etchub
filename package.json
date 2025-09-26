@@ -1,0 +1,13 @@
+
+{
+  "name": "etc-hub",
+  "version": "1.0.0",
+  "description": "ETC Hub - The Future of Ethereum Classic",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
