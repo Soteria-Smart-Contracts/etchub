@@ -1,33 +1,6 @@
-<<<<<<< HEAD
-modules = ["nodejs-20"]
-=======
-modules = ["web", "nodejs-20"]
->>>>>>> a0c6734eee6d80efeed8e986b1740dea6a83a402
+modules = ["web"]
 [agent]
 expertMode = true
 
 [nix]
 channel = "stable-25_05"
-
-<<<<<<< HEAD
-[workflows]
-runButton = "Run Server"
-
-[[workflows.workflow]]
-name = "Run Server"
-author = 10236786
-mode = "sequential"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "node server.js"
-
-[[ports]]
-localPort = 5000
-externalPort = 80
-
-=======
->>>>>>> a0c6734eee6d80efeed8e986b1740dea6a83a402
-[deployment]
-run = ["sh", "-c", "node server.js"]
-deploymentTarget = "cloudrun"
