@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+</head>
+<body>
+    <h1>Admin Console</h1>
+
+    <h2>Request Access</h2>
+    <form id="requestAccessForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <button type="submit">Request Access</button>
+    </form>
+
+    <h2>Approve IP Address</h2>
+    <form id="approveIpForm">
+        <label for="ip">IP Address:</label>
+        <input type="text" id="ip" name="ip" required>
+        <button type="submit">Approve IP</button>
+    </form>
+
+    <hr style="margin: 2em 0;">
+
+    <h2>Submission Queue</h2>
+    <div id="submissionQueue">
+        <p>Loading submissions...</p>
+    </div>
+
+    <div id="previewPane" style="display:none; position: fixed; top: 10%; left: 20%; width: 60%; height: 70%; background: #333; color: #fff; border: 1px solid #ccc; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.5); overflow-y: auto;">
+        <h3 id="previewTitle"></h3>
+        <p><strong>By:</strong> <span id="previewAuthor"></span></p>
+        <hr>
+        <div id="previewContent"></div>
+        <button onclick="closePreview()" style="margin-top: 20px;">Close</button>
+    </div>
+
+    <script>
+        let submissionsData = [];
+
+        const fetchAndDisplaySubmissions = async () => {
+            try {
+                const response = await fetch('/api/submissions');
+                if (!response.ok) {
+                    const queueDiv = document.getElementById('submissionQueue');
+                    const errorText = await response.text();
+                    queueDiv.innerHTML = `<p style="color: red;">Error loading submissions: ${errorText}</p>`;
+                    return;
+                }
+                submissionsData = await response.json();
+                const queueDiv = document.getElementById('submissionQueue');
+
+                if (submissionsData.length === 0) {
+                    queueDiv.innerHTML = '<p>No submissions yet.</p>';
+                    return;
+                }
+
+                const table = `
+                    <table border="1" style="width:100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th style="padding: 8px; text-align: left;">ID</th>
+                                <th style="padding: 8px; text-align: left;">Title</th>
+                                <th style="padding: 8px; text-align: left;">Author</th>
+                                <th style="padding: 8px; text-align: left;">Status</th>
+                                <th style="padding: 8px; text-align: left;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${submissionsData.map(s => `
+                                <tr>
+                                    <td style="padding: 8px;">${s.id}</td>
+                                    <td style="padding: 8px;">${s.title}</td>
+                                    <td style="padding: 8px;">${s.xUsername}</td>
+                                    <td style="padding: 8px;">${s.approved ? 'Approved' : 'Pending'}</td>
+                                    <td style="padding: 8px;">
+                                        <button onclick="previewSubmission(${s.id})">Preview</button>
+                                        ${!s.approved ? `<button onclick="approveSubmission(${s.id})">Approve</button>` : ''}
+                                        <button onclick="deleteSubmission(${s.id})">Delete</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                queueDiv.innerHTML = table;
+            } catch (error) {
+                console.error('Failed to fetch submissions:', error);
+                document.getElementById('submissionQueue').innerHTML = '<p style="color: red;">Failed to load submissions. Check the console for details.</p>';
+            }
+        };
+
+        const previewSubmission = (id) => {
+            const submission = submissionsData.find(s => s.id == id);
+            if (!submission) return;
+
+            document.getElementById('previewTitle').innerText = submission.title;
+            document.getElementById('previewAuthor').innerText = submission.xUsername;
+            document.getElementById('previewContent').innerText = submission.content;
+            document.getElementById('previewPane').style.display = 'block';
+        };
+
+        const closePreview = () => {
+            document.getElementById('previewPane').style.display = 'none';
+        };
+
+        const approveSubmission = async (id) => {
+            const response = await fetch(`/api/submissions/approve/${id}`, { method: 'PUT' });
+            const result = await response.text();
+            alert(result);
+            fetchAndDisplaySubmissions();
+        };
+
+        const deleteSubmission = async (id) => {
+            if (confirm('Are you sure you want to delete this submission?')) {
+                const response = await fetch(`/api/submissions/delete/${id}`, { method: 'DELETE' });
+                const result = await response.text();
+                alert(result);
+                fetchAndDisplaySubmissions();
+            }
+        };
+
+        document.getElementById('requestAccessForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = e.target.username.value;
+            const response = await fetch('/api/admin/request-access', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            });
+            const result = await response.text();
+            alert(result);
+        });
+
+        document.getElementById('approveIpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const ip = e.target.ip.value;
+            const response = await fetch('/api/admin/approve-ip', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ip })
+            });
+            const result = await response.text();
+            alert(result);
+        });
+
+        document.addEventListener('DOMContentLoaded', fetchAndDisplaySubmissions);
+    </script>
+</body>
+</html>
