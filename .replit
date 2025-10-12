@@ -1,10 +1,15 @@
+<<<<<<< HEAD
 modules = ["nodejs-20"]
+=======
+modules = ["web", "nodejs-20"]
+>>>>>>> a0c6734eee6d80efeed8e986b1740dea6a83a402
 [agent]
 expertMode = true
 
 [nix]
 channel = "stable-25_05"
 
+<<<<<<< HEAD
 [workflows]
 runButton = "Run Server"
 
@@ -21,6 +26,8 @@ args = "node server.js"
 localPort = 5000
 externalPort = 80
 
+=======
+>>>>>>> a0c6734eee6d80efeed8e986b1740dea6a83a402
 [deployment]
 run = ["sh", "-c", "node server.js"]
 deploymentTarget = "cloudrun"
