@@ -76,7 +76,7 @@ app.get('/api/articles', (req, res) => {
                 const fileContent = fs.readFileSync(filePath, 'utf8');
                 
                 // Extract author from the file content
-                const authorMatch = fileContent.match(/<p><strong>By:<\/strong>\s*<span id="previewAuthor">(.*?)<\/span><\/p>/);
+                const authorMatch = fileContent.match(/<div class="text-gray-400 text-sm">\s*<span>By\s*(.*?)<\/span>\s*<\/div>/);
                 const author = authorMatch ? authorMatch[1] : 'Admin User';
                 
                 // Extract description from the file content
