@@ -91,30 +91,40 @@ router.put('/approve/:id', (req, res) => {
         const newFilePath = path.join(generatedNewsDir, `${slug}.html`);
 
         // Convert content to preserve paragraph structure
-        // Replace double line breaks with </p><p> to create new paragraphs
-        // Then wrap single lines in <p> tags
-        let contentWithParagraphs = submission.content
-            // Replace double line breaks with paragraph separators
-            .replace(/\n\s*\n/g, '</p><p>')
-            // Split by single line breaks and wrap in paragraphs
-            .split('\n')
-            .map(line => {
-                // If line is empty after trimming, it's a paragraph separator
-                if (line.trim() === '') {
-                    return '';
+        // This approach:
+        // 1. Splits content by double line breaks (paragraph separators)
+        // 2. For each paragraph, replaces single line breaks with <br> tags
+        // 3. Wraps each paragraph in <p> tags
+        // 4. Preserves empty paragraphs
+        const paragraphs = submission.content
+            .split(/\n\s*\n/)  // Split by double line breaks (paragraph separators)
+            .map(paragraph => {
+                // Split paragraph by single line breaks
+                const lines = paragraph.split('\n');
+                
+                // Process each line in the paragraph
+                const processedLines = lines.map(line => {
+                    // Trim whitespace from line
+                    const trimmedLine = line.trim();
+                    // Return empty string if line is empty after trimming
+                    return trimmedLine;
+                }).filter(line => line.length > 0 || line === ''); // Keep empty lines for spacing
+                
+                // Join lines with <br> tags for single line breaks within paragraph
+                // This preserves line breaks within paragraphs
+                const paragraphContent = processedLines.join('<br>');
+                
+                // If paragraph has content, wrap in <p> tags
+                if (paragraphContent.length > 0) {
+                    return `<p>${paragraphContent}</p>`;
+                } else {
+                    // Keep empty paragraphs as empty <p> tags
+                    return '<p></p>';
                 }
-                // Wrap non-empty lines in paragraph tags
-                return `<p>${line.trim()}</p>`;
             })
-            .join('');
-        // Remove any empty paragraph tags that might have been created
-        contentWithParagraphs = contentWithParagraphs.replace(/<p><\/p>/g, '');
-        // Wrap the entire content in paragraph tags if it's not already wrapped
-        if (contentWithParagraphs && !contentWithParagraphs.startsWith('<p>')) {
-            contentWithParagraphs = `<p>${contentWithParagraphs}</p>`;
-        }
-        // Ensure proper paragraph structure
-        contentWithParagraphs = contentWithParagraphs.replace(/<\/p><p>/g, '</p>\n<p>');
+            .filter(paragraph => paragraph !== '<p></p>' || paragraph === '<p></p>'); // Keep empty paragraphs
+        
+        const contentWithParagraphs = paragraphs.join('\n');
         
         const newContent = data
             .replace(/{{TITLE}}/g, submission.title)
