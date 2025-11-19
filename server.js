@@ -67,11 +67,30 @@ app.get('/api/articles', (req, res) => {
         // Filter only .html files and extract slug (filename without .html)
         const articles = files
             .filter(file => file.endsWith('.html'))
-            .map(file => ({
-                slug: file.slice(0, -5), // Remove .html extension
-                title: file.slice(0, -5).replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), // Convert slug to title
-                url: `/news/${file.slice(0, -5)}`
-            }))
+            .map(file => {
+                const slug = file.slice(0, -5); // Remove .html extension
+                const title = file.slice(0, -5).replace(/-/g, ' '); // Keep original capitalization
+                
+                // Read the file to extract author and description
+                const filePath = path.join(directoryPath, file);
+                const fileContent = fs.readFileSync(filePath, 'utf8');
+                
+                // Extract author from the file content
+                const authorMatch = fileContent.match(/<p><strong>By:<\/strong>\s*<span id="previewAuthor">(.*?)<\/span><\/p>/);
+                const author = authorMatch ? authorMatch[1] : 'Admin User';
+                
+                // Extract description from the file content
+                const descriptionMatch = fileContent.match(/<div class="mb-8">\s*<p class="text-gray-300 text-lg">(.*?)<\/p>\s*<\/div>/);
+                const description = descriptionMatch ? descriptionMatch[1] : 'This article was created from the templatestory.html template and serves as an example for the system.';
+                
+                return {
+                    slug: slug,
+                    title: title,
+                    author: author,
+                    description: description,
+                    url: `/news/${slug}`
+                };
+            })
             .sort((a, b) => b.slug.localeCompare(a.slug)); // Sort by slug (newest first)
         
         res.json(articles);

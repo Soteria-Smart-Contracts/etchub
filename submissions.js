@@ -92,7 +92,8 @@ router.put('/approve/:id', (req, res) => {
         const newContent = data
             .replace(/{{TITLE}}/g, submission.title)
             .replace(/{{AUTHOR}}/g, submission.xUsername)
-            .replace(/{{CONTENT}}/g, submission.content);
+            .replace(/{{CONTENT}}/g, submission.content)
+            .replace(/{{DESCRIPTION}}/g, submission.description || '');
 
         fs.writeFile(newFilePath, newContent, 'utf8', (err) => {
             if (err) {

@@ -26,6 +26,8 @@
         <h3 id="previewTitle"></h3>
         <p><strong>By:</strong> <span id="previewAuthor"></span></p>
         <hr>
+        <div id="previewDescription" class="mb-4 text-gray-200"></div>
+        <hr>
         <div id="previewContent"></div>
         <button onclick="closePreview()" style="margin-top: 20px;">Close</button>
     </div>
@@ -91,6 +93,7 @@
 
             document.getElementById('previewTitle').innerText = submission.title;
             document.getElementById('previewAuthor').innerText = submission.xUsername;
+            document.getElementById('previewDescription').innerText = submission.description || '';
             document.getElementById('previewContent').innerText = submission.content;
             document.getElementById('previewPane').style.display = 'block';
         };
