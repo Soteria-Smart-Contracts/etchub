@@ -108,30 +108,6 @@
             }
         };
 
-        document.getElementById('requestAccessForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = e.target.username.value;
-            const response = await fetch('/api/admin/request-access', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username })
-            });
-            const result = await response.text();
-            alert(result);
-        });
-
-        document.getElementById('approveIpForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const ip = e.target.ip.value;
-            const response = await fetch('/api/admin/approve-ip', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ip })
-            });
-            const result = await response.text();
-            alert(result);
-        });
-
         document.addEventListener('DOMContentLoaded', fetchAndDisplaySubmissions);
     </script>
 </body>
