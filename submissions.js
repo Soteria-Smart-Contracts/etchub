@@ -46,7 +46,7 @@ router.post('/submit', (req, res) => {
         xUsername,
         content,
         description: description || '',
-        category: category || 'news', // Default to 'news' if not provided
+        category: 'news', // All articles are now news type
         approved: false
     };
     submissions.push(newSubmission);
@@ -131,7 +131,7 @@ router.put('/approve/:id', (req, res) => {
             .replace(/{{AUTHOR}}/g, submission.xUsername)
             .replace(/{{CONTENT}}/g, contentWithParagraphs)
             .replace(/{{DESCRIPTION}}/g, submission.description || '')
-            .replace(/{{CATEGORY}}/g, submission.category || 'news');
+            .replace(/{{CATEGORY}}/g, 'news'); // All articles are now news type
 
         fs.writeFile(newFilePath, newContent, 'utf8', (err) => {
             if (err) {

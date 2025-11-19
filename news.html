@@ -173,11 +173,7 @@
                         >
                     </div>
                     <div class="flex gap-2">
-                        <button class="filter-btn active px-4 py-3 rounded-lg text-sm font-medium" data-category="all">All</button>
-                        <button class="filter-btn px-4 py-3 rounded-lg text-sm font-medium" data-category="news">News</button>
-                        <button class="filter-btn px-4 py-3 rounded-lg text-sm font-medium" data-category="analysis">Analysis</button>
-                        <button class="filter-btn px-4 py-3 rounded-lg text-sm font-medium" data-category="tutorial">Tutorials</button>
-                        <button class="filter-btn px-4 py-3 rounded-lg text-sm font-medium" data-category="mining">Mining</button>
+                        <!-- Removed category filters as all articles are now the same -->
                     </div>
                 </div>
             </div>
@@ -343,7 +339,7 @@
                 const postsHTML = articles.map(article => `
                     <div class="post-card p-6 rounded-2xl">
                         <div class="flex justify-between items-start mb-4">
-                            <span class="category-badge">${article.category || 'news'}</span>
+                            <!-- Removed category badge as all articles are now news type -->
                             <span class="text-xs text-gray-400">${new Date().toLocaleDateString()}</span>
                         </div>
                         <h3 class="text-xl font-bold mb-3"><a href="${article.url}" class="hover:text-yellow-400">${article.title}</a></h3>

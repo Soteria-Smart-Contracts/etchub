@@ -91,6 +91,7 @@ app.get('/api/articles', (req, res) => {
                     title: title,
                     author: author,
                     description: description,
+                    category: 'news', // All articles are now news type
                     url: `/news/${slug}`
                 };
             })
