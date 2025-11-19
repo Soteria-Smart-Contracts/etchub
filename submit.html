@@ -179,23 +179,14 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Tags (comma separated)</label>
-                        <input
-                            type="text"
-                            id="articleTags"
-                            class="form-input w-full px-4 py-3 rounded-lg"
-                            placeholder="Enter tags separated by commas..."
-                        >
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Image URL (optional)</label>
-                        <input
-                            type="url"
-                            id="articleImage"
-                            class="form-input w-full px-4 py-3 rounded-lg"
-                            placeholder="https://example.com/image.jpg"
-                        >
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Content *</label>
+                        <textarea
+                            id="articleContent"
+                            required
+                            rows="12"
+                            class="form-input w-full px-4 py-3 rounded-lg resize-none"
+                            placeholder="Write your article content here..."
+                        ></textarea>
                     </div>
                     
                     <div class="flex justify-end">
@@ -248,8 +239,6 @@
                 const author = document.getElementById('authorName').value.trim();
                 const category = document.getElementById('articleCategory').value;
                 const content = document.getElementById('articleContent').value.trim();
-                const tags = document.getElementById('articleTags').value.trim();
-                const imageUrl = document.getElementById('articleImage').value.trim();
                 
                 // Basic validation
                 if (!title || !author || !category || !content) {
@@ -263,8 +252,7 @@
                     xUsername: author,  // Changed from "author" to match backend
                     content,
                     description: document.getElementById('articleDescription').value.trim(),
-                    // We're not sending category or tags to the backend for simplicity
-                    // But they could be added if needed later
+                    category
                 };
                 
                 try {
