@@ -319,44 +319,65 @@
 
     <script src="main.js"></script>
     <script>
-        // Simple script to handle displaying news articles
-        document.addEventListener('DOMContentLoaded', function() {
-            // Function to load and display all articles
-            function loadAllArticles() {
-                const postsGrid = document.getElementById('postsGrid');
-                const loadingState = document.getElementById('loadingState');
-                
-                // Simulate loading
-                setTimeout(() => {
-                    // In a real app, this would fetch from backend
-                    // For now we'll just show the static HTML files
-                    // The server serves static files from /news/ directory
-                    // So we'll just show a message that articles will appear here
-                    // when they are approved and generated
-                    const postsHTML = `
-                        <div class="post-card p-6 rounded-2xl">
-                            <div class="flex justify-between items-start mb-4">
-                                <span class="category-badge">News</span>
-                                <span class="text-xs text-gray-400">2024-01-01</span>
-                            </div>
-                            <h3 class="text-xl font-bold mb-3"><a href="/news/sample-news-article" class="hover:text-yellow-400">Sample News Article</a></h3>
-                            <p class="text-gray-300 mb-4">This is a sample news article that demonstrates how approved articles will appear on the news page. This article was created from the templatestory.html template and serves as an example for the system.</p>
-                            <div class="flex justify-between items-center">
-                                <span class="text-sm text-gray-400">By Admin User</span>
-                                <a href="/news/sample-news-article" class="text-yellow-400 hover:text-yellow-300 font-medium">Read more</a>
-                            </div>
-                        </div>
-                    `;
-                    
-                    postsGrid.innerHTML = postsHTML;
-                    postsGrid.classList.remove('hidden');
-                    loadingState.classList.add('hidden');
-                }, 1000);
-            }
+        // Function to load and display all articles
+        async function loadAllArticles() {
+            const postsGrid = document.getElementById('postsGrid');
+            const loadingState = document.getElementById('loadingState');
+            const emptyState = document.getElementById('emptyState');
             
-            // Load all articles on page load
-            loadAllArticles();
-        });
+            try {
+                const response = await fetch('/api/articles');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const articles = await response.json();
+                
+                if (articles.length === 0) {
+                    loadingState.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+                
+                // Create HTML for each article
+                const postsHTML = articles.map(article => `
+                    <div class="post-card p-6 rounded-2xl">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="category-badge">News</span>
+                            <span class="text-xs text-gray-400">${new Date().toLocaleDateString()}</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3"><a href="${article.url}" class="hover:text-yellow-400">${article.title}</a></h3>
+                        <p class="text-gray-300 mb-4">This article was created from the templatestory.html template and serves as an example for the system.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">By Admin User</span>
+                            <a href="${article.url}" class="text-yellow-400 hover:text-yellow-300 font-medium">Read more</a>
+                        </div>
+                    </div>
+                `).join('');
+                
+                postsGrid.innerHTML = postsHTML;
+                postsGrid.classList.remove('hidden');
+                loadingState.classList.add('hidden');
+                emptyState.classList.add('hidden');
+            } catch (error) {
+                console.error('Failed to fetch articles:', error);
+                loadingState.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                document.getElementById('emptyState').innerHTML = `
+                    <div class="max-w-md mx-auto">
+                        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <h3 class="text-xl font-semibold text-gray-300 mb-2">No articles available</h3>
+                        <p class="text-gray-400 mb-6">There are currently no approved articles. Check back later or submit your own article.</p>
+                        <a href="/submit.html" class="btn-primary px-6 py-3 rounded-lg font-semibold">Submit Your Article</a>
+                    </div>
+                `;
+            }
+        }
+        
+        // Load all articles on page load
+        document.addEventListener('DOMContentLoaded', loadAllArticles);
     </script>
 </body>
 </html>
