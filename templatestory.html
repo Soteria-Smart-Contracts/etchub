@@ -15,30 +15,32 @@
             --bg-navy: #0A0E1A;
             --text-light: #E8E8E8;
         }
-
+        
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, var(--bg-navy) 0%, var(--primary-teal) 100%);
             min-height: 100vh;
             color: var(--text-light);
+            margin: 0;
+            padding: 0;
         }
-
+        
         .orbitron {
             font-family: 'Orbitron', monospace;
         }
-
+        
         .copper-gradient {
             background: linear-gradient(45deg, var(--secondary-copper), var(--accent-gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
+        
         .nav-link {
             position: relative;
             transition: all 0.3s ease;
         }
-
+        
         .nav-link::after {
             content: '';
             position: absolute;
@@ -49,14 +51,32 @@
             background: var(--accent-gold);
             transition: width 0.3s ease;
         }
-
+        
         .nav-link:hover::after {
             width: 100%;
         }
-
+        
         .article-content a {
             color: var(--accent-gold);
             text-decoration: underline;
+        }
+        
+        /* Override Tailwind's default paragraph margins */
+        .prose p {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Ensure proper spacing between paragraphs */
+        .prose p + p {
+            margin-top: 1.5rem;
+        }
+        
+        /* Ensure proper spacing for line breaks */
+        .prose br {
+            display: block;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
