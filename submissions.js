@@ -1,9 +1,14 @@
 
 const express = require('express');
-const { ipWhitelist } = require('./admin');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
+
+// Ensure generated_news directory exists
+const generatedNewsDir = path.join(__dirname, 'generated_news');
+if (!fs.existsSync(generatedNewsDir)) {
+    fs.mkdirSync(generatedNewsDir, { recursive: true });
+}
 
 let submissions = [];
 
@@ -24,8 +29,8 @@ router.post('/submit', (req, res) => {
     res.status(201).send('Submission successful');
 });
 
-// Endpoint to get all submissions (for admin use)
-router.get('/', ipWhitelist, (req, res) => {
+// Endpoint to get all submissions (open access)
+router.get('/', (req, res) => {
     res.json(submissions);
 });
 
@@ -39,8 +44,8 @@ const slugify = (text) => {
         .replace(/-+$/, '');            // Trim - from end of text
 };
 
-// Endpoint for approving articles
-router.put('/approve/:id', ipWhitelist, (req, res) => {
+// Endpoint for approving articles (open access)
+router.put('/approve/:id', (req, res) => {
     const { id } = req.params;
     const submission = submissions.find(s => s.id == id);
     if (!submission) {
@@ -57,7 +62,7 @@ router.put('/approve/:id', ipWhitelist, (req, res) => {
         }
 
         const slug = slugify(submission.title);
-        const newFilePath = path.join(__dirname, 'generated_news', `${slug}.html`);
+        const newFilePath = path.join(generatedNewsDir, `${slug}.html`);
 
         const newContent = data
             .replace(/{{TITLE}}/g, submission.title)
@@ -69,13 +74,13 @@ router.put('/approve/:id', ipWhitelist, (req, res) => {
                 console.error(err);
                 return res.status(500).send('Error saving the new article');
             }
-            res.send(`Submission approved and article generated at /generated_news/${slug}.html`);
+            res.send(`Submission approved and article generated at /news/${slug}.html`);
         });
     });
 });
 
-// Endpoint for deleting articles
-router.delete('/delete/:id', ipWhitelist, (req, res) => {
+// Endpoint for deleting articles (open access)
+router.delete('/delete/:id', (req, res) => {
     const { id } = req.params;
     const index = submissions.findIndex(s => s.id == id);
     if (index === -1) {
