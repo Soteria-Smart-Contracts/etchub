@@ -107,6 +107,7 @@
             const result = await response.text();
             alert(result);
             fetchAndDisplaySubmissions();
+            fetchAndDisplayArticles(); // Refresh existing articles section
         };
 
         const deleteSubmission = async (id) => {
