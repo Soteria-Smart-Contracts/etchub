@@ -90,13 +90,31 @@ router.put('/approve/:id', (req, res) => {
         const slug = slugify(submission.title);
         const newFilePath = path.join(generatedNewsDir, `${slug}.html`);
 
-        // Convert line breaks in content to paragraph tags
-        const contentWithParagraphs = submission.content
+        // Convert content to preserve paragraph structure
+        // Replace double line breaks with </p><p> to create new paragraphs
+        // Then wrap single lines in <p> tags
+        let contentWithParagraphs = submission.content
+            // Replace double line breaks with paragraph separators
+            .replace(/\n\s*\n/g, '</p><p>')
+            // Split by single line breaks and wrap in paragraphs
             .split('\n')
-            .map(line => line.trim())
-            .filter(line => line.length > 0)
-            .map(line => `<p>${line}</p>`)
+            .map(line => {
+                // If line is empty after trimming, it's a paragraph separator
+                if (line.trim() === '') {
+                    return '';
+                }
+                // Wrap non-empty lines in paragraph tags
+                return `<p>${line.trim()}</p>`;
+            })
             .join('');
+        // Remove any empty paragraph tags that might have been created
+        contentWithParagraphs = contentWithParagraphs.replace(/<p><\/p>/g, '');
+        // Wrap the entire content in paragraph tags if it's not already wrapped
+        if (contentWithParagraphs && !contentWithParagraphs.startsWith('<p>')) {
+            contentWithParagraphs = `<p>${contentWithParagraphs}</p>`;
+        }
+        // Ensure proper paragraph structure
+        contentWithParagraphs = contentWithParagraphs.replace(/<\/p><p>/g, '</p>\n<p>');
         
         const newContent = data
             .replace(/{{TITLE}}/g, submission.title)
