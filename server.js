@@ -50,6 +50,30 @@ app.get('/templatestory', (req, res) =>
     res.sendFile(path.join(__dirname, 'templatestory.html'))
         );
 
+// API endpoint to list all articles in generated_news directory
+app.get('/api/articles', (req, res) => {
+    const directoryPath = path.join(__dirname, 'generated_news');
+    
+    fs.readdir(directoryPath, (err, files) => {
+        if (err) {
+            console.error('Error reading generated_news directory:', err);
+            return res.status(500).json({ error: 'Failed to read articles directory' });
+        }
+        
+        // Filter only .html files and extract slug (filename without .html)
+        const articles = files
+            .filter(file => file.endsWith('.html'))
+            .map(file => ({
+                slug: file.slice(0, -5), // Remove .html extension
+                title: file.slice(0, -5).replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), // Convert slug to title
+                url: `/news/${file.slice(0, -5)}`
+            }))
+            .sort((a, b) => b.slug.localeCompare(a.slug)); // Sort by slug (newest first)
+        
+        res.json(articles);
+    });
+});
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
