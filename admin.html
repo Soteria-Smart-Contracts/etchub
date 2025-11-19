@@ -77,7 +77,7 @@
                                     <td style="padding: 8px;">${s.xUsername}</td>
                                     <td style="padding: 8px;">${s.approved ? 'Approved' : 'Pending'}</td>
                                     <td style="padding: 8px;">
-                                        <button onclick="previewSubmission(${s.id})">Preview</button>
+                                        <button onmouseover="previewSubmission(${s.id})" onmouseout="hidePreview()">Preview</button>
                                         ${!s.approved ? `<button onclick="approveSubmission(${s.id})">Approve</button>` : ''}
                                         <button onclick="deleteSubmission(${s.id})">Delete</button>
                                     </td>
