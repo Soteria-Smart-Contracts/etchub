@@ -94,7 +94,8 @@ router.put('/approve/:id', (req, res) => {
             .replace(/{{TITLE}}/g, submission.title)
             .replace(/{{AUTHOR}}/g, submission.xUsername)
             .replace(/{{CONTENT}}/g, submission.content)
-            .replace(/{{DESCRIPTION}}/g, submission.description || '');
+            .replace(/{{DESCRIPTION}}/g, submission.description || '')
+            .replace(/{{CATEGORY}}/g, submission.category || 'news');
 
         fs.writeFile(newFilePath, newContent, 'utf8', (err) => {
             if (err) {
