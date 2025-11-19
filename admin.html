@@ -114,8 +114,72 @@
                 fetchAndDisplaySubmissions();
             }
         };
+        const fetchAndDisplayArticles = async () => {
+            try {
+                const response = await fetch('/api/articles');
+                if (!response.ok) {
+                    const articlesDiv = document.getElementById('articlesList');
+                    const errorText = await response.text();
+                    articlesDiv.innerHTML = `<p style="color: red;">Error loading articles: ${errorText}</p>`;
+                    return;
+                }
+                const articles = await response.json();
+                const articlesDiv = document.getElementById('articlesList');
 
-        document.addEventListener('DOMContentLoaded', fetchAndDisplaySubmissions);
+                if (articles.length === 0) {
+                    articlesDiv.innerHTML = '<p>No existing articles yet.</p>';
+                    return;
+                }
+
+                const table = `
+                    <table border="1" style="width:100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th style="padding: 8px; text-align: left;">Title</th>
+                                <th style="padding: 8px; text-align: left;">URL</th>
+                                <th style="padding: 8px; text-align: left;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${articles.map(article => `
+                                <tr>
+                                    <td style="padding: 8px;">${article.title}</td>
+                                    <td style="padding: 8px;"><a href="${article.url}" target="_blank">${article.url}</a></td>
+                                    <td style="padding: 8px;">
+                                        <button onclick="deleteArticle('${article.slug}')">Delete</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                articlesDiv.innerHTML = table;
+            } catch (error) {
+                console.error('Failed to fetch articles:', error);
+                document.getElementById('articlesList').innerHTML = '<p style="color: red;">Failed to load articles. Check the console for details.</p>';
+            }
+        };
+
+        const deleteArticle = async (slug) => {
+            if (confirm(`Are you sure you want to delete the article "${slug}"? This action cannot be undone.`)) {
+                try {
+                    const response = await fetch(`/api/articles/${slug}`, {
+                        method: 'DELETE'
+                    });
+                    const result = await response.text();
+                    alert(result);
+                    fetchAndDisplayArticles();
+                } catch (error) {
+                    console.error('Failed to delete article:', error);
+                    alert('Failed to delete article. Please try again.');
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAndDisplaySubmissions();
+            fetchAndDisplayArticles();
+        });
     </script>
 </body>
 </html>
