@@ -164,6 +164,21 @@
                     </div>
                     
                     <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Description *</label>
+                        <textarea
+                            id="articleDescription"
+                            required
+                            rows="4"
+                            class="form-input w-full px-4 py-3 rounded-lg resize-none"
+                            placeholder="Enter a brief description of your article (max 250 characters)..."
+                            maxlength="250"
+                        ></textarea>
+                        <div class="mt-1 text-xs text-gray-400">
+                            <span id="descriptionCount">0</span>/250 characters
+                        </div>
+                    </div>
+                    
+                    <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Content *</label>
                         <textarea
                             id="articleContent"
@@ -296,6 +311,20 @@
                 }
             });
         });
+        
+        // Add character counter for description
+        const descriptionInput = document.getElementById('articleDescription');
+        const descriptionCount = document.getElementById('descriptionCount');
+        
+        if (descriptionInput && descriptionCount) {
+            const updateCount = () => {
+                descriptionCount.textContent = descriptionInput.value.length;
+            };
+            
+            descriptionInput.addEventListener('input', updateCount);
+            descriptionInput.addEventListener('keyup', updateCount);
+            updateCount(); // Initialize count
+        }
     </script>
 </body>
 </html>
