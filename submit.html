@@ -137,6 +137,22 @@
                     </div>
                     
                     <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Category *</label>
+                        <select
+                            id="articleCategory"
+                            required
+                            class="form-input w-full px-4 py-3 rounded-lg"
+                        >
+                            <option value="">Select a category</option>
+                            <option value="news">News</option>
+                            <option value="analysis">Analysis</option>
+                            <option value="tutorial">Tutorial</option>
+                            <option value="mining">Mining</option>
+                            <option value="general">General</option>
+                        </select>
+                    </div>
+                    
+                    <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Description *</label>
                         <textarea
                             id="articleDescription"
@@ -221,10 +237,11 @@
                 // Get form values
                 const title = document.getElementById('articleTitle').value.trim();
                 const author = document.getElementById('authorName').value.trim();
+                const category = document.getElementById('articleCategory').value;
                 const content = document.getElementById('articleContent').value.trim();
                 
                 // Basic validation
-                if (!title || !author || !content) {
+                if (!title || !author || !category || !content) {
                     alert('Please fill in all required fields');
                     return;
                 }
@@ -234,7 +251,8 @@
                     title,
                     xUsername: author,  // Changed from "author" to match backend
                     content,
-                    description: document.getElementById('articleDescription').value.trim()
+                    description: document.getElementById('articleDescription').value.trim(),
+                    category
                 };
                 
                 try {

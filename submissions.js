@@ -36,7 +36,7 @@ const saveSubmissions = () => {
 
 // Endpoint for submitting articles
 router.post('/submit', (req, res) => {
-    const { title, xUsername, content, description } = req.body;
+    const { title, xUsername, content, description, category } = req.body;
     if (!title || !xUsername || !content) {
         return res.status(400).send('Missing required fields');
     }
@@ -46,6 +46,7 @@ router.post('/submit', (req, res) => {
         xUsername,
         content,
         description: description || '',
+        category: category || 'news', // Default to 'news' if not provided
         approved: false
     };
     submissions.push(newSubmission);
@@ -129,7 +130,8 @@ router.put('/approve/:id', (req, res) => {
             .replace(/{{TITLE}}/g, submission.title)
             .replace(/{{AUTHOR}}/g, submission.xUsername)
             .replace(/{{CONTENT}}/g, contentWithParagraphs)
-            .replace(/{{DESCRIPTION}}/g, submission.description || '');
+            .replace(/{{DESCRIPTION}}/g, submission.description || '')
+            .replace(/{{CATEGORY}}/g, submission.category || 'news');
 
         fs.writeFile(newFilePath, newContent, 'utf8', (err) => {
             if (err) {
