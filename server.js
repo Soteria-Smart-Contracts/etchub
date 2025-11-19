@@ -13,6 +13,23 @@ app.use(express.static(__dirname));
 // Serve static files from generated_news directory
 app.use('/news', express.static(path.join(__dirname, 'generated_news')));
 
+// Handle article pages without .html extension
+app.get('/news/:slug', (req, res) => {
+    const slug = req.params.slug;
+    const filePath = path.join(__dirname, 'generated_news', `${slug}.html`);
+    
+    // Check if the file exists
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+            // File doesn't exist, return 404
+            res.status(404).send('Article not found');
+        } else {
+            // File exists, serve it
+            res.sendFile(filePath);
+        }
+    });
+});
+
 app.use('/api/submissions', submissionsRouter);
 app.use('/api/admin', adminRouter);
 
