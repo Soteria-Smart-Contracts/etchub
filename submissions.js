@@ -90,10 +90,18 @@ router.put('/approve/:id', (req, res) => {
         const slug = slugify(submission.title);
         const newFilePath = path.join(generatedNewsDir, `${slug}.html`);
 
+        // Convert line breaks in content to paragraph tags
+        const contentWithParagraphs = submission.content
+            .split('\n')
+            .map(line => line.trim())
+            .filter(line => line.length > 0)
+            .map(line => `<p>${line}</p>`)
+            .join('');
+        
         const newContent = data
             .replace(/{{TITLE}}/g, submission.title)
             .replace(/{{AUTHOR}}/g, submission.xUsername)
-            .replace(/{{CONTENT}}/g, submission.content)
+            .replace(/{{CONTENT}}/g, contentWithParagraphs)
             .replace(/{{DESCRIPTION}}/g, submission.description || '')
             .replace(/{{CATEGORY}}/g, submission.category || 'news');
 
