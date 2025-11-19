@@ -83,13 +83,13 @@ router.put('/approve/:id', (req, res) => {
     const slug = slugify(submission.title);
     const newFilePath = path.join(generatedNewsDir, `${slug}.html`);
 
-    // Convert line breaks in content to paragraph tags
+    // Convert line breaks in content to paragraph tags with proper spacing
     const contentWithParagraphs = submission.content
         .split('\n')
         .map(line => line.trim())
         .filter(line => line.length > 0)
         .map(line => `<p>${line}</p>`)
-        .join('');
+        .join('\n\n');
     
     // Create HTML content directly without template file
     const newContent = `<!DOCTYPE html>
