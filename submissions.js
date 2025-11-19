@@ -83,13 +83,29 @@ router.put('/approve/:id', (req, res) => {
     const slug = slugify(submission.title);
     const newFilePath = path.join(generatedNewsDir, `${slug}.html`);
 
-    // Convert line breaks in content to paragraph tags with proper spacing
-    const contentWithParagraphs = submission.content
-        .split('\n')
-        .map(line => line.trim())
-        .filter(line => line.length > 0)
-        .map(line => `<p>${line}</p>`)
-        .join('\n\n');
+    // Robust paragraph handling: preserve intentional spacing and structure
+    // Split content by double line breaks to identify paragraphs
+    const paragraphs = submission.content
+        .split(/\n\s*\n/)
+        .map(paragraph => paragraph.trim())
+        .filter(paragraph => paragraph.length > 0);
+    
+    // Convert each paragraph to HTML <p> tags
+    const contentWithParagraphs = paragraphs
+        .map(paragraph => {
+            // Handle line breaks within paragraphs (single line breaks)
+            // Replace single line breaks with <br> tags
+            const formattedParagraph = paragraph
+                .replace(/\n/g, '<br>')
+                .replace(/&/g, '&')
+                .replace(/</g, '<')
+                .replace(/>/g, '>')
+                .replace(/"/g, '"')
+                .replace(/'/g, '&#x27;');
+            
+            return `<p>${formattedParagraph}</p>`;
+        })
+        .join('\n');
     
     // Create HTML content directly without template file
     const newContent = `<!DOCTYPE html>
