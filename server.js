@@ -46,6 +46,10 @@ app.get('/news', (req, res) =>
     res.sendFile(path.join(__dirname, 'news.html'))
         );
 
+app.get('/submit', (req, res) =>
+    res.sendFile(path.join(__dirname, 'submit.html'))
+        );
+
 app.get('/templatestory', (req, res) =>
     res.sendFile(path.join(__dirname, 'templatestory.html'))
         );
