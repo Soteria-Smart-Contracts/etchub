@@ -36,7 +36,7 @@ const saveSubmissions = () => {
 
 // Endpoint for submitting articles
 router.post('/submit', (req, res) => {
-    const { title, xUsername, content } = req.body;
+    const { title, xUsername, content, description } = req.body;
     if (!title || !xUsername || !content) {
         return res.status(400).send('Missing required fields');
     }
@@ -45,6 +45,7 @@ router.post('/submit', (req, res) => {
         title,
         xUsername,
         content,
+        description: description || '', // Default to empty string if not provided
         approved: false
     };
     submissions.push(newSubmission);
