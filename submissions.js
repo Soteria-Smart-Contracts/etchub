@@ -48,6 +48,7 @@ router.post('/submit', (req, res) => {
         approved: false
     };
     submissions.push(newSubmission);
+    saveSubmissions(); // Save to file
     res.status(201).send('Submission successful');
 });
 
