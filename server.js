@@ -69,11 +69,14 @@ app.get('/api/articles', (req, res) => {
             .filter(file => file.endsWith('.html'))
             .map(file => {
                 const slug = file.slice(0, -5); // Remove .html extension
-                const title = file.slice(0, -5).replace(/-/g, ' '); // Keep original capitalization
                 
-                // Read the file to extract author and description
+                // Read the file to extract author, description, and actual title
                 const filePath = path.join(directoryPath, file);
                 const fileContent = fs.readFileSync(filePath, 'utf8');
+                
+                // Extract actual title from the file content
+                const titleMatch = fileContent.match(/<h1 class="text-4xl lg:text-5xl font-bold orbitron mb-4 copper-gradient">(.*?)<\/h1>/);
+                const title = titleMatch ? titleMatch[1] : slug.replace(/-/g, ' ');
                 
                 // Extract author from the file content
                 const authorMatch = fileContent.match(/<div class="text-gray-400 text-sm">\s*<span>By\s*(.*?)<\/span>\s*<\/div>/);
