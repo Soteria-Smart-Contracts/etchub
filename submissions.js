@@ -111,6 +111,7 @@ router.delete('/delete/:id', (req, res) => {
         return res.status(404).send('Submission not found');
     }
     submissions.splice(index, 1);
+    saveSubmissions(); // Save to file after deletion
     res.send('Submission deleted');
 });
 
