@@ -10,7 +10,29 @@ if (!fs.existsSync(generatedNewsDir)) {
     fs.mkdirSync(generatedNewsDir, { recursive: true });
 }
 
+// Path to submissions JSON file
+const submissionsFilePath = path.join(__dirname, 'submissions.json');
+
+// Load submissions from file or initialize empty array if file doesn't exist
 let submissions = [];
+if (fs.existsSync(submissionsFilePath)) {
+    try {
+        const data = fs.readFileSync(submissionsFilePath, 'utf8');
+        submissions = JSON.parse(data);
+    } catch (error) {
+        console.error('Error reading submissions file:', error);
+        submissions = [];
+    }
+}
+
+// Save submissions to file
+const saveSubmissions = () => {
+    try {
+        fs.writeFileSync(submissionsFilePath, JSON.stringify(submissions, null, 2));
+    } catch (error) {
+        console.error('Error writing to submissions file:', error);
+    }
+};
 
 // Endpoint for submitting articles
 router.post('/submit', (req, res) => {
