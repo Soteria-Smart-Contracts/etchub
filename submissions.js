@@ -76,6 +76,7 @@ router.put('/approve/:id', (req, res) => {
     }
 
     submission.approved = true;
+    saveSubmissions(); // Save to file after approval
 
     const templatePath = path.join(__dirname, 'templatestory.html');
     fs.readFile(templatePath, 'utf8', (err, data) => {
