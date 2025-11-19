@@ -2,7 +2,7 @@
 const express = require('express');
 const path = require('path');
 const submissionsRouter = require('./submissions');
-const adminRouter = require('./admin');
+const { router: adminRouter } = require('./admin');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
