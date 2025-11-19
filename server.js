@@ -78,6 +78,26 @@ app.get('/api/articles', (req, res) => {
     });
 });
 
+// API endpoint to delete an article
+app.delete('/api/articles/:slug', (req, res) => {
+    const slug = req.params.slug;
+    const filePath = path.join(__dirname, 'generated_news', `${slug}.html`);
+    
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+            return res.status(404).send('Article not found');
+        }
+        
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error('Error deleting article file:', err);
+                return res.status(500).send('Error deleting article');
+            }
+            res.send(`Article "${slug}" deleted successfully`);
+        });
+    });
+});
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
