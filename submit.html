@@ -116,9 +116,9 @@
                 <form id="articleForm" class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Article Title *</label>
-                        <input 
-                            type="text" 
-                            id="articleTitle" 
+                        <input
+                            type="text"
+                            id="articleTitle"
                             required
                             class="form-input w-full px-4 py-3 rounded-lg"
                             placeholder="Enter the title of your article..."
@@ -127,9 +127,9 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Author Name *</label>
-                        <input 
-                            type="text" 
-                            id="authorName" 
+                        <input
+                            type="text"
+                            id="authorName"
                             required
                             class="form-input w-full px-4 py-3 rounded-lg"
                             placeholder="Enter your name or username..."
@@ -138,8 +138,8 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Category *</label>
-                        <select 
-                            id="articleCategory" 
+                        <select
+                            id="articleCategory"
                             required
                             class="form-input w-full px-4 py-3 rounded-lg"
                         >
@@ -154,8 +154,8 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Content *</label>
-                        <textarea 
-                            id="articleContent" 
+                        <textarea
+                            id="articleContent"
                             required
                             rows="12"
                             class="form-input w-full px-4 py-3 rounded-lg resize-none"
@@ -165,9 +165,9 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Tags (comma separated)</label>
-                        <input 
-                            type="text" 
-                            id="articleTags" 
+                        <input
+                            type="text"
+                            id="articleTags"
                             class="form-input w-full px-4 py-3 rounded-lg"
                             placeholder="Enter tags separated by commas..."
                         >
@@ -175,17 +175,17 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Image URL (optional)</label>
-                        <input 
-                            type="url" 
-                            id="articleImage" 
+                        <input
+                            type="url"
+                            id="articleImage"
                             class="form-input w-full px-4 py-3 rounded-lg"
                             placeholder="https://example.com/image.jpg"
                         >
                     </div>
                     
                     <div class="flex justify-end">
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             class="btn-primary px-8 py-3 rounded-lg font-semibold"
                         >
                             Submit Article
@@ -242,15 +242,13 @@
                     return;
                 }
                 
-                // Prepare submission data
+                // Prepare submission data - corrected field names to match backend
                 const submissionData = {
                     title,
-                    author,
-                    category,
+                    xUsername: author,  // Changed from "author" to match backend
                     content,
-                    tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
-                    imageUrl,
-                    timestamp: new Date().toISOString()
+                    // We're not sending category or tags to the backend for simplicity
+                    // But they could be added if needed later
                 };
                 
                 try {
@@ -263,7 +261,7 @@
                         body: JSON.stringify(submissionData)
                     });
                     
-                    const result = await response.json();
+                    const result = await response.text(); // Changed from json() to text()
                     
                     if (response.ok) {
                         // Show success message
@@ -278,7 +276,7 @@
                             submitMessage.classList.add('hidden');
                         }, 5000);
                     } else {
-                        throw new Error(result.error || 'Submission failed');
+                        throw new Error(result || 'Submission failed');
                     }
                 } catch (error) {
                     console.error('Error submitting article:', error);
