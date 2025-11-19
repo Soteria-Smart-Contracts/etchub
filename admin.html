@@ -104,6 +104,10 @@
             document.getElementById('previewPane').style.display = 'block';
         };
 
+        const hidePreview = () => {
+            document.getElementById('previewPane').style.display = 'none';
+        };
+
         const closePreview = () => {
             document.getElementById('previewPane').style.display = 'none';
         };
@@ -221,6 +225,15 @@
                     alert('Failed to create test article. Please check the console for details.');
                 }
             });
+        });
+
+        // Add event listener to hide preview when clicking outside
+        document.addEventListener('click', (event) => {
+            const previewPane = document.getElementById('previewPane');
+            const previewButton = event.target.closest('button');
+            if (previewPane.style.display === 'block' && !previewButton?.closest('#previewPane')) {
+                hidePreview();
+            }
         });
     </script>
 </body>
