@@ -343,7 +343,7 @@
                 const postsHTML = articles.map(article => `
                     <div class="post-card p-6 rounded-2xl">
                         <div class="flex justify-between items-start mb-4">
-                            <span class="category-badge">News</span>
+                            <span class="category-badge">${article.category || 'news'}</span>
                             <span class="text-xs text-gray-400">${new Date().toLocaleDateString()}</span>
                         </div>
                         <h3 class="text-xl font-bold mb-3"><a href="${article.url}" class="hover:text-yellow-400">${article.title}</a></h3>
