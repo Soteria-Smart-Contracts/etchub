@@ -10,6 +10,9 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.static(__dirname));
 
+// Serve static files from generated_news directory
+app.use('/news', express.static(path.join(__dirname, 'generated_news')));
+
 app.use('/api/submissions', submissionsRouter);
 app.use('/api/admin', adminRouter);
 
