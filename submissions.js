@@ -75,8 +75,8 @@ router.put('/approve/:id', (req, res) => {
         return res.status(404).send('Submission not found');
     }
 
+    // Mark as approved
     submission.approved = true;
-    saveSubmissions(); // Save to file after approval
 
     const templatePath = path.join(__dirname, 'templatestory.html');
     fs.readFile(templatePath, 'utf8', (err, data) => {
@@ -98,7 +98,15 @@ router.put('/approve/:id', (req, res) => {
                 console.error(err);
                 return res.status(500).send('Error saving the new article');
             }
-            res.send(`Submission approved and article generated at /news/${slug}.html`);
+            
+            // Remove submission from array after successful article generation
+            const index = submissions.findIndex(s => s.id == id);
+            if (index !== -1) {
+                submissions.splice(index, 1);
+                saveSubmissions(); // Save updated submissions array to file
+            }
+            
+            res.send(`Submission approved and article generated at /news/${slug}`);
         });
     });
 });
