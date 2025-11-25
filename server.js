@@ -5,7 +5,7 @@ const fs = require('fs');
 const submissionsRouter = require('./submissions');
 const storage = require('./storage');
 const { router: adminRouter } = require('./admin');
-const { generateMetaTags } = require('./meta-tags');
+const { metaTags, generateMetaTags } = require('./meta-tags');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,7 +15,11 @@ app.use(express.static(__dirname));
 
 // Helper function to inject meta tags into HTML
 function injectMetaTags(html, pageType, customData = {}) {
-  const metaTags = generateMetaTags(pageType, customData);
+  // Build absolute URL for images
+  const imageUrl = customData.image || metaTags[pageType]?.image || '/resources/hub.jpeg';
+  const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `http://${process.env.REPLIT_DOMAINS || 'localhost:5000'}${imageUrl}`;
+  
+  const metaTags = generateMetaTags(pageType, { ...customData, image: absoluteImageUrl });
   return html.replace('<!-- META_TAGS_PLACEHOLDER -->', metaTags);
 }
 

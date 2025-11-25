@@ -2,25 +2,25 @@ const metaTags = {
   home: {
     title: 'ETC Hub - The Future of Ethereum Classic',
     description: 'Join the premier community platform for Ethereum Classic enthusiasts. Connect, share insights, and shape the future of decentralized blockchain technology.',
-    image: 'https://etc-hub.onrender.com/resources/hub.jpeg',
+    image: '/resources/hub.jpeg',
     type: 'website'
   },
   news: {
     title: 'ETC News & Insights - ETC Hub',
     description: 'Stay informed with the latest news, analysis, and community discussions about Ethereum Classic.',
-    image: 'https://etc-hub.onrender.com/resources/hub.jpeg',
+    image: '/resources/etc-coins.png',
     type: 'website'
   },
   submit: {
     title: 'Submit Your Article - ETC Hub',
     description: 'Share your insights, knowledge, and experiences about Ethereum Classic with our community.',
-    image: 'https://etc-hub.onrender.com/resources/hub.jpeg',
+    image: '/resources/hero-bg.png',
     type: 'website'
   },
   article: {
     title: '{{TITLE}}',
     description: '{{DESCRIPTION}}',
-    image: 'https://etc-hub.onrender.com/resources/hub.jpeg',
+    image: '/resources/hub.jpeg',
     type: 'article'
   }
 };
