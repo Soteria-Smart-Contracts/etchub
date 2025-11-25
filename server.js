@@ -15,6 +15,9 @@ app.use(express.static(__dirname));
 // Initialize database if using database storage
 storage.initDatabase().catch(err => console.error('Database initialization failed:', err));
 
+// Run footer migration on startup
+storage.migrateArticleFooters().catch(err => console.error('Footer migration failed:', err));
+
 // Serve static files from generated_news directory
 app.use('/news', express.static(path.join(__dirname, 'generated_news')));
 
