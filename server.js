@@ -5,12 +5,19 @@ const fs = require('fs');
 const submissionsRouter = require('./submissions');
 const storage = require('./storage');
 const { router: adminRouter } = require('./admin');
+const { generateMetaTags } = require('./meta-tags');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(express.static(__dirname));
+
+// Helper function to inject meta tags into HTML
+function injectMetaTags(html, pageType, customData = {}) {
+  const metaTags = generateMetaTags(pageType, customData);
+  return html.replace('<!-- META_TAGS_PLACEHOLDER -->', metaTags);
+}
 
 // Initialize database if using database storage
 storage.initDatabase().catch(err => console.error('Database initialization failed:', err));
@@ -53,16 +60,19 @@ app.get('/admin', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+    res.send(injectMetaTags(html, 'home'));
 });
 
-app.get('/news', (req, res) =>
-    res.sendFile(path.join(__dirname, 'news.html'))
-);
+app.get('/news', (req, res) => {
+    const html = fs.readFileSync(path.join(__dirname, 'news.html'), 'utf8');
+    res.send(injectMetaTags(html, 'news'));
+});
 
-app.get('/submit', (req, res) =>
-    res.sendFile(path.join(__dirname, 'submit.html'))
-);
+app.get('/submit', (req, res) => {
+    const html = fs.readFileSync(path.join(__dirname, 'submit.html'), 'utf8');
+    res.send(injectMetaTags(html, 'submit'));
+});
 
 app.get('/templatestory', (req, res) =>
     res.sendFile(path.join(__dirname, 'templatestory.html'))
