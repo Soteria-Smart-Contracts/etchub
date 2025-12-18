@@ -25,12 +25,12 @@ This is a simplified version of the ETC Hub with the following changes:
 
 ## Technical Implementation
 
-### Files Modified:
-- `server.js`: Removed IP whitelist middleware and authentication checks
-- `submissions.js`: Removed IP whitelist middleware from all endpoints
-- `admin.js`: Removed IP whitelist middleware and authentication logic
-- `news.html`: Updated to properly display generated news articles
-- `submit.html`: Fixed form submission to match backend expectations
+### Files:
+- `server.js`: Main server with all routes including admin dashboard
+- `submissions.js`: Handles article submission and approval workflow
+- `storage.js`: Database/local file storage abstraction
+- `meta-tags.js`: Generates SEO meta tags for social sharing
+- `templatestory.html`: Template for generating approved articles
 
 ### Directory Structure:
 - `generated_news/` - Stores approved articles as static HTML files

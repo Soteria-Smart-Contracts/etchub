@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs');
 const submissionsRouter = require('./submissions');
 const storage = require('./storage');
-const { router: adminRouter } = require('./admin');
 const { metaTags, generateMetaTags } = require('./meta-tags');
 
 const app = express();
@@ -57,7 +56,10 @@ app.get('/news/:slug', async (req, res) => {
 });
 
 app.use('/api/submissions', submissionsRouter);
-app.use('/api/admin', adminRouter);
+
+app.get('/api/admin/dashboard', (req, res) => {
+    res.send('Welcome to the admin dashboard');
+});
 
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
