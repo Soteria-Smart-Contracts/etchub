@@ -34,12 +34,15 @@ This is a simplified version of the ETC Hub with the following changes:
 │   ├── admin.html       (admin panel)
 │   ├── news/            (generated articles)
 │   └── resources/       (images and assets)
+├── src/                 (all JavaScript server files)
+│   ├── server.js        (main server with routes)
+│   ├── submissions.js   (article submission handlers)
+│   ├── storage.js       (database/file storage logic)
+│   ├── meta-tags.js     (SEO meta tag generator)
+│   ├── storage-config.txt
+│   └── submissions.json (local storage file)
 ├── templates/           (server-side templates)
 │   └── templatestory.html
-├── server.js            (main server with routes)
-├── submissions.js       (article submission handlers)
-├── storage.js           (database/file storage logic)
-├── meta-tags.js         (SEO meta tag generator)
 └── config files         (package.json, etc.)
 ```
 

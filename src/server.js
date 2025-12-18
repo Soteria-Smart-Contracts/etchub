@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Helper function to inject meta tags into HTML
 function injectMetaTags(html, pageType, customData = {}) {
@@ -18,15 +18,15 @@ function injectMetaTags(html, pageType, customData = {}) {
   const imageUrl = customData.image || metaTags[pageType]?.image || '/resources/hub.jpeg';
   const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `http://${process.env.REPLIT_DOMAINS || 'localhost:5000'}${imageUrl}`;
   
-  const metaTags = generateMetaTags(pageType, { ...customData, image: absoluteImageUrl });
-  return html.replace('<!-- META_TAGS_PLACEHOLDER -->', metaTags);
+  const generatedTags = generateMetaTags(pageType, { ...customData, image: absoluteImageUrl });
+  return html.replace('<!-- META_TAGS_PLACEHOLDER -->', generatedTags);
 }
 
 // Initialize database if using database storage
 storage.initDatabase().catch(err => console.error('Database initialization failed:', err));
 
 // Serve static files from news directory
-app.use('/news', express.static(path.join(__dirname, 'public', 'news')));
+app.use('/news', express.static(path.join(__dirname, '..', 'public', 'news')));
 
 // Handle article pages without .html extension
 app.get('/news/:slug', async (req, res) => {
@@ -44,7 +44,7 @@ app.get('/news/:slug', async (req, res) => {
             res.status(500).send('Error retrieving article');
         }
     } else {
-        const filePath = path.join(__dirname, 'public', 'news', `${slug}.html`);
+        const filePath = path.join(__dirname, '..', 'public', 'news', `${slug}.html`);
         fs.access(filePath, fs.constants.F_OK, (err) => {
             if (err) {
                 res.status(404).send('Article not found');
@@ -62,26 +62,26 @@ app.get('/api/admin/dashboard', (req, res) => {
 });
 
 app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin.html'));
 });
 
 app.get('/', (req, res) => {
-    const html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
+    const html = fs.readFileSync(path.join(__dirname, '..', 'public', 'index.html'), 'utf8');
     res.send(injectMetaTags(html, 'home'));
 });
 
 app.get('/news', (req, res) => {
-    const html = fs.readFileSync(path.join(__dirname, 'public', 'news.html'), 'utf8');
+    const html = fs.readFileSync(path.join(__dirname, '..', 'public', 'news.html'), 'utf8');
     res.send(injectMetaTags(html, 'news'));
 });
 
 app.get('/submit', (req, res) => {
-    const html = fs.readFileSync(path.join(__dirname, 'public', 'submit.html'), 'utf8');
+    const html = fs.readFileSync(path.join(__dirname, '..', 'public', 'submit.html'), 'utf8');
     res.send(injectMetaTags(html, 'submit'));
 });
 
 app.get('/templatestory', (req, res) =>
-    res.sendFile(path.join(__dirname, 'templates', 'templatestory.html'))
+    res.sendFile(path.join(__dirname, '..', 'templates', 'templatestory.html'))
 );
 
 // API endpoint to list all articles

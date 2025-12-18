@@ -193,19 +193,19 @@ module.exports = {
     
     // Articles
     saveArticle: STORAGE_MODE === 'database' ? saveArticleDatabase : (slug, title, author, description, content, category) => {
-        const dir = path.join(__dirname, 'public', 'news');
+        const dir = path.join(__dirname, '..', 'public', 'news');
         if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
         fs.writeFileSync(path.join(dir, `${slug}.html`), content);
     },
     getArticle: STORAGE_MODE === 'database' ? getArticleDatabase : (slug) => {
-        const filePath = path.join(__dirname, 'public', 'news', `${slug}.html`);
+        const filePath = path.join(__dirname, '..', 'public', 'news', `${slug}.html`);
         if (fs.existsSync(filePath)) {
             return { slug, content: fs.readFileSync(filePath, 'utf8') };
         }
         return null;
     },
     getAllArticles: STORAGE_MODE === 'database' ? getAllArticlesDatabase : () => {
-        const dir = path.join(__dirname, 'public', 'news');
+        const dir = path.join(__dirname, '..', 'public', 'news');
         if (!fs.existsSync(dir)) return [];
         const files = fs.readdirSync(dir).filter(f => f.endsWith('.html'));
         return files.map(file => {
@@ -221,6 +221,6 @@ module.exports = {
         });
     },
     deleteArticle: STORAGE_MODE === 'database' ? deleteArticleDatabase : (slug) => {
-        fs.unlinkSync(path.join(__dirname, 'public', 'news', `${slug}.html`));
+        fs.unlinkSync(path.join(__dirname, '..', 'public', 'news', `${slug}.html`));
     }
 };

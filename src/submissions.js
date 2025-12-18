@@ -6,7 +6,7 @@ const path = require('path');
 const storage = require('./storage');
 
 // Ensure news directory exists (for local storage)
-const newsDir = path.join(__dirname, 'public', 'news');
+const newsDir = path.join(__dirname, '..', 'public', 'news');
 if (storage.STORAGE_MODE === 'local' && !fs.existsSync(newsDir)) {
     fs.mkdirSync(newsDir, { recursive: true });
 }
@@ -84,7 +84,7 @@ router.put('/approve/:id', async (req, res) => {
             return res.status(404).send('Submission not found');
         }
 
-        const templatePath = path.join(__dirname, 'templates', 'templatestory.html');
+        const templatePath = path.join(__dirname, '..', 'templates', 'templatestory.html');
         const data = fs.readFileSync(templatePath, 'utf8');
 
         const slug = slugify(submission.title);
