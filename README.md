@@ -14,7 +14,7 @@ This is a simplified version of the ETC Hub with the following changes:
    - Users can submit articles via the submit form
    - Articles are stored in a temporary submissions queue
    - Admin can approve articles to make them publicly available
-   - Approved articles are saved as HTML files in the `generated_news` directory
+   - Approved articles are saved as HTML files in the `public/news` directory
    - Approved articles are accessible via `/news/{article-name}.html`
 
 3. **Admin Panel**
@@ -25,15 +25,23 @@ This is a simplified version of the ETC Hub with the following changes:
 
 ## Technical Implementation
 
-### Files:
-- `server.js`: Main server with all routes including admin dashboard
-- `submissions.js`: Handles article submission and approval workflow
-- `storage.js`: Database/local file storage abstraction
-- `meta-tags.js`: Generates SEO meta tags for social sharing
-- `templatestory.html`: Template for generating approved articles
-
 ### Directory Structure:
-- `generated_news/` - Stores approved articles as static HTML files
+```
+├── public/              (all HTML and static files)
+│   ├── index.html       (home page)
+│   ├── news.html        (news listing)
+│   ├── submit.html      (article submission form)
+│   ├── admin.html       (admin panel)
+│   ├── news/            (generated articles)
+│   └── resources/       (images and assets)
+├── templates/           (server-side templates)
+│   └── templatestory.html
+├── server.js            (main server with routes)
+├── submissions.js       (article submission handlers)
+├── storage.js           (database/file storage logic)
+├── meta-tags.js         (SEO meta tag generator)
+└── config files         (package.json, etc.)
+```
 
 ## How to Run
 
