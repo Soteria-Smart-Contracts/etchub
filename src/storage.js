@@ -2,16 +2,14 @@ const fs = require('fs');
 const path = require('path');
 const { Pool } = require('pg');
 
-// Read storage mode from config file (1 = local files, 2 = database)
+// Determine storage mode based purely on environment variable
 const getStorageMode = () => {
-    try {
-        const configPath = path.join(__dirname, 'storage-config.txt');
-        const mode = fs.readFileSync(configPath, 'utf8').trim();
-        return parseInt(mode) === 2 ? 'database' : 'local';
-    } catch (error) {
-        console.warn('storage-config.txt not found, defaulting to local storage');
-        return 'local';
+    if (process.env.DATABASE_URL) {
+        console.log('DATABASE_URL detected. Using Postgres database storage mode.');
+        return 'database';
     }
+    console.log('No DATABASE_URL found. Falling back to local file storage mode.');
+    return 'local';
 };
 
 const STORAGE_MODE = getStorageMode();
