@@ -23,11 +23,7 @@ function injectMetaTags(html, pageType, customData = {}) {
 }
 
 // Initialize database if using database storage
-storage.initDatabase().then(() => {
-    if (storage.STORAGE_MODE === 'database' && storage.runMigration) {
-        return storage.runMigration();
-    }
-}).catch(err => console.error('Database initialization/migration failed:', err));
+storage.initDatabase().catch(err => console.error('Database initialization failed:', err));
 
 // Serve static files from news directory
 app.use('/news', express.static(path.join(__dirname, '..', 'public', 'news')));

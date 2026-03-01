@@ -2,16 +2,14 @@ const fs = require('fs');
 const path = require('path');
 const { Pool } = require('pg');
 
-// Read storage mode from config file (1 = local files, 2 = database)
+// Determine storage mode based purely on environment variable
 const getStorageMode = () => {
-    try {
-        const configPath = path.join(__dirname, 'storage-config.txt');
-        const mode = fs.readFileSync(configPath, 'utf8').trim();
-        return parseInt(mode) === 2 ? 'database' : 'local';
-    } catch (error) {
-        console.warn('storage-config.txt not found, defaulting to local storage');
-        return 'local';
+    if (process.env.DATABASE_URL) {
+        console.log('DATABASE_URL detected. Using Postgres database storage mode.');
+        return 'database';
     }
+    console.log('No DATABASE_URL found. Falling back to local file storage mode.');
+    return 'local';
 };
 
 const STORAGE_MODE = getStorageMode();
@@ -165,130 +163,9 @@ const deleteArticleDatabase = async (slug) => {
     }
 };
 
-// --- MIGRATION LOGIC ---
-
-// Helper function to export DB data to local files
-const exportDatabaseToFiles = async () => {
-    if (STORAGE_MODE !== 'database' || !DB_POOL) return;
-
-    const submissionsFilePath = path.join(__dirname, 'submissions.json');
-    const newsDir = path.join(__dirname, '..', 'public', 'news');
-
-    // Make sure news dir exists
-    if (!fs.existsSync(newsDir)) fs.mkdirSync(newsDir, { recursive: true });
-
-    // Check if we already have local files. If so, don't overwrite.
-    const hasSubmissionsFile = fs.existsSync(submissionsFilePath);
-    const hasLocalArticles = fs.readdirSync(newsDir).filter(f => f.endsWith('.html')).length > 0;
-
-    if (!hasSubmissionsFile && !hasLocalArticles) {
-        console.log('Migration: No local files found. Exporting data from database to local files...');
-
-        try {
-            // 1. Export submissions
-            const subs = await loadSubmissionsDatabase();
-            fs.writeFileSync(submissionsFilePath, JSON.stringify(subs, null, 2));
-            console.log(`Migration: Exported ${subs.length} submissions to submissions.json`);
-
-            // 2. Export articles
-            const articlesResult = await DB_POOL.query('SELECT * FROM articles');
-            const articles = articlesResult.rows;
-            for (const article of articles) {
-                const filePath = path.join(newsDir, `${article.slug}.html`);
-                fs.writeFileSync(filePath, article.content);
-            }
-            console.log(`Migration: Exported ${articles.length} articles to public/news/`);
-
-            console.log('Migration: Export to local files complete.');
-        } catch (err) {
-            console.error('Migration Error: Failed to export database to files:', err);
-        }
-    } else {
-        console.log('Migration: Local files already exist. Skipping export.');
-    }
-};
-
-
-
-// Helper function to import local files to DB (useful for fresh DBs like Railway)
-const importFilesToDatabase = async () => {
-    if (STORAGE_MODE !== 'database' || !DB_POOL) return;
-
-    try {
-        const subsCheck = await DB_POOL.query('SELECT COUNT(*) FROM submissions');
-        const articlesCheck = await DB_POOL.query('SELECT COUNT(*) FROM articles');
-
-        const subsCount = parseInt(subsCheck.rows[0].count);
-        const articlesCount = parseInt(articlesCheck.rows[0].count);
-
-        if (subsCount === 0 && articlesCount === 0) {
-            console.log('Migration: Database is empty. Attempting to import from local files...');
-
-            const submissionsFilePath = path.join(__dirname, 'submissions.json');
-            if (fs.existsSync(submissionsFilePath)) {
-                try {
-                    const data = fs.readFileSync(submissionsFilePath, 'utf8');
-                    const localSubmissions = JSON.parse(data);
-                    for (const sub of localSubmissions) {
-                        await DB_POOL.query(
-                            'INSERT INTO submissions (title, x_username, content, description, category, approved) VALUES ($1, $2, $3, $4, $5, $6)',
-                            [sub.title, sub.xUsername || sub.x_username, sub.content, sub.description, sub.category, sub.approved]
-                        );
-                    }
-                    console.log(`Migration: Imported ${localSubmissions.length} submissions.`);
-                } catch (e) {
-                    console.error('Migration Error: Could not import submissions:', e);
-                }
-            }
-
-            const newsDir = path.join(__dirname, '..', 'public', 'news');
-            if (fs.existsSync(newsDir)) {
-                const files = fs.readdirSync(newsDir).filter(f => f.endsWith('.html'));
-                let importedArticles = 0;
-                for (const file of files) {
-                    const slug = file.slice(0, -5);
-                    const content = fs.readFileSync(path.join(newsDir, file), 'utf8');
-
-                    // Try to parse basic meta info back out from HTML
-                    const titleMatch = content.match(/<h1 class="text-4xl lg:text-5xl font-bold orbitron mb-4 copper-gradient">(.*?)<\/h1>/);
-                    const title = titleMatch ? titleMatch[1] : slug.replace(/-/g, ' ');
-
-                    const authorMatch = content.match(/<div class="text-gray-400 text-sm">\s*<span>By\s*(.*?)<\/span>\s*<\/div>/);
-                    const author = authorMatch ? authorMatch[1] : 'Admin User';
-
-                    const descriptionMatch = content.match(/<div class="mb-8">\s*<p class="text-gray-300 text-lg">(.*?)<\/p>\s*<\/div>/);
-                    const description = descriptionMatch ? descriptionMatch[1] : '';
-
-                    await saveArticleDatabase(slug, title, author, description, content, 'news');
-                    importedArticles++;
-                }
-                console.log(`Migration: Imported ${importedArticles} articles.`);
-            }
-
-            console.log('Migration: Import complete.');
-        } else {
-            console.log(`Migration: Database is populated (${subsCount} submissions, ${articlesCount} articles). Skipping import.`);
-        }
-    } catch (err) {
-        console.error('Migration Error: Failed to check or import files into database:', err);
-    }
-};
-
-const runMigration = async () => {
-    if (STORAGE_MODE !== 'database' || !DB_POOL) return;
-
-    // Always attempt export first. If we have DB data but no files, it will save them.
-    await exportDatabaseToFiles();
-
-    // Then attempt import. If DB is empty but files exist, it will import them.
-    await importFilesToDatabase();
-};
-
-
 module.exports = {
     STORAGE_MODE,
     initDatabase,
-    runMigration,
     
     // Submissions
     loadSubmissions: STORAGE_MODE === 'database' ? loadSubmissionsDatabase : loadSubmissionsLocal,
