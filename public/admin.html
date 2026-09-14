@@ -16,6 +16,14 @@
 
     <hr style="margin: 2em 0;">
 
+    <h2>Import Articles</h2>
+    <div style="margin: 1em 0;">
+        <textarea id="importJsonTextarea" rows="10" style="width: 100%; font-family: monospace;" placeholder='[{"slug": "my-article", "title": "My Article", "content": "..."}]'></textarea>
+        <button id="importJsonButton" style="margin-top: 10px; padding: 10px 20px;">Import JSON</button>
+    </div>
+
+    <hr style="margin: 2em 0;">
+
     <h2>Submission Queue</h2>
     <div id="submissionQueue">
         <p>Loading submissions...</p>
@@ -194,6 +202,57 @@
             fetchAndDisplaySubmissions();
             fetchAndDisplayArticles();
             
+            // Add event listener for import JSON button
+            document.getElementById('importJsonButton').addEventListener('click', async () => {
+                const textarea = document.getElementById('importJsonTextarea');
+                const jsonText = textarea.value.trim();
+
+                if (!jsonText) {
+                    alert('Please paste some JSON data first.');
+                    return;
+                }
+
+                let jsonData;
+                try {
+                    jsonData = JSON.parse(jsonText);
+                } catch (e) {
+                    alert('Invalid JSON: ' + e.message);
+                    return;
+                }
+
+                if (!Array.isArray(jsonData)) {
+                    alert('The JSON must be an array of article objects.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/api/articles/import', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(jsonData)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        let msg = result.message;
+                        if (result.errors && result.errors.length > 0) {
+                            msg += '\n\nErrors:\n' + result.errors.join('\n');
+                        }
+                        alert(msg);
+                        textarea.value = ''; // clear text area
+                        fetchAndDisplayArticles(); // Refresh existing articles section
+                    } else {
+                        alert('Failed to import articles: ' + (result.error || 'Unknown error'));
+                    }
+                } catch (error) {
+                    console.error('Error importing articles:', error);
+                    alert('Failed to import articles. Please check the console for details.');
+                }
+            });
+
             // Add event listener for create test article button
             document.getElementById('createTestArticle').addEventListener('click', async () => {
                 const testArticle = {

@@ -9,7 +9,7 @@ const { metaTags, generateMetaTags } = require('./meta-tags');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Helper function to inject meta tags into HTML
@@ -83,6 +83,51 @@ app.get('/submit', (req, res) => {
 app.get('/templatestory', (req, res) =>
     res.sendFile(path.join(__dirname, '..', 'templates', 'templatestory.html'))
 );
+
+// API endpoint to import articles from JSON
+app.post('/api/articles/import', async (req, res) => {
+    try {
+        const articles = req.body;
+        if (!Array.isArray(articles)) {
+            return res.status(400).json({ error: 'Payload must be an array of articles' });
+        }
+
+        let importedCount = 0;
+        let errors = [];
+
+        for (const article of articles) {
+            try {
+                // Ensure required fields are present
+                if (!article.slug || !article.title || !article.content) {
+                    errors.push(`Article with title "${article.title}" is missing required fields (slug, title, content).`);
+                    continue;
+                }
+
+                await storage.saveArticle(
+                    article.slug,
+                    article.title,
+                    article.author || 'Unknown',
+                    article.description || '',
+                    article.content,
+                    article.category || 'news'
+                );
+                importedCount++;
+            } catch (err) {
+                console.error(`Failed to import article: ${article.slug}`, err);
+                errors.push(`Failed to import article ${article.slug}: ${err.message}`);
+            }
+        }
+
+        res.json({
+            message: `Successfully imported ${importedCount} articles.`,
+            errors: errors.length > 0 ? errors : undefined
+        });
+
+    } catch (error) {
+        console.error('Error importing articles:', error);
+        res.status(500).json({ error: 'Failed to import articles' });
+    }
+});
 
 // API endpoint to list all articles
 app.get('/api/articles', async (req, res) => {
